@@ -1,0 +1,8 @@
+{
+  "name": "dhip-exam",
+  "version": "1.0.0",
+  "description": "Dahua DHIP Certification Online Exam - Sonda",
+  "dependencies": {
+    "@netlify/blobs": "^8.0.0"
+  }
+}

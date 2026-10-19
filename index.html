@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es" style="margin:0;padding:0;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dahua DHIP Certification Online Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f5f7;--card:#ffffff;--text:#16161a;--muted:#6b7280;
+  --accent:#E60012;--accent-soft:rgba(230,0,18,.09);
+  --accent2:#111827;--accent2-soft:rgba(17,24,39,.07);--border:rgba(17,24,39,.10);
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:"Red Hat Display",sans-serif;background:var(--bg);color:var(--text);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.reveal{animation:fadeUp .5s ease both;}
+.opt{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;padding:14px 16px;border:1.5px solid var(--border);border-radius:12px;background:#fff;cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:10px;font-size:15px;line-height:1.5;}
+.opt:hover{border-color:var(--accent);background:var(--accent-soft);}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft);font-weight:600;}
+.opt .mark{flex-shrink:0;width:24px;height:24px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);}
+.opt.multi .mark{border-radius:6px;}
+.opt.sel .mark{background:var(--accent);border-color:var(--accent);color:#fff;}
+.navbtn{width:36px;height:36px;border-radius:9px;border:1.5px solid var(--border);background:#fff;color:var(--muted);font-weight:600;font-size:13px;cursor:pointer;transition:all .15s;}
+.navbtn:hover{border-color:var(--accent);}
+.navbtn.answered{background:var(--accent);border-color:var(--accent);color:#fff;}
+.navbtn.cur{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent);}
+.btn-primary{background:var(--accent);color:#fff;border:none;padding:13px 28px;border-radius:11px;font-weight:700;font-size:15px;cursor:pointer;transition:opacity .15s;}
+.btn-primary:hover{opacity:.9;}
+.btn-primary:disabled{background:#d1d5db;cursor:not-allowed;}
+.btn-secondary{background:#fff;color:var(--text);border:1.5px solid var(--border);padding:12px 22px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.field{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;font-family:inherit;background:#fff;transition:border-color .15s;}
+.field:focus{outline:none;border-color:var(--accent);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+.toast{position:fixed;left:50%;top:16px;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.25);}
+.hidden{display:none !important;}
+.loading{display:inline-block;width:16px;height:16px;border:2px solid #f3f3f3;border-top:2px solid var(--accent);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+</style>
+</head>
+<body>
+<div style="min-height:100%;background:radial-gradient(900px 400px at 90% -5%, rgba(230,0,18,.07), transparent 60%), var(--bg);">
+  <header style="background:#fff;border-bottom:1px solid var(--border);">
+    <div style="max-width:960px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <img id="logo" src="https://p16-cc-image-search-sign-sg.ibyteimg.com/tos-alisg-i-h9hire4aei-sg/image/4aeda411ce3dcac9752487fd71d9313f~tplv-h9hire4aei-image.jpeg?rk3s=feb11e32&x-expires=1807648451&x-signature=Rk%2FgRf%2BR8bCP5RVYheQX6Bgxfqk%3D" alt="Dahua Technology" style="height:38px;width:auto;max-width:180px;object-fit:contain;" onerror="this.style.display='none'">
+        <div>
+          <div style="font-weight:800;font-size:16px;letter-spacing:-.01em;line-height:1.2;">Dahua DHIP Certification <span style="color:var(--accent);">Examen en Línea</span></div>
+          <div style="font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-top:2px;">Examen Oficial · Socio Sonda</div>
+        </div>
+      </div>
+      <div id="validity" style="font-size:12px;font-weight:600;color:var(--muted);text-align:right;"></div>
+    </div>
+  </header>
+
+  <main id="app" style="max-width:960px;margin:0 auto;padding:28px 20px 60px;"></main>
+
+  <footer style="border-top:1px solid var(--border);background:#fff;">
+    <div style="max-width:960px;margin:0 auto;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="font-size:11px;color:var(--muted);">© Dahua Technology · Sonda — Examen de Certificación DHIP. Válido hasta el 31 de octubre de 2026.</div>
+      <div id="adminArea">
+        <button id="exportLoginBtn" class="btn-secondary" style="padding:8px 14px;font-size:12px;">Admin: Exportar Registros</button>
+        <div id="adminLoginForm" class="hidden" style="margin-top:8px;">
+          <input id="adminEmail" class="field" type="email" placeholder="Correo de administrador" style="max-width:260px;margin-bottom:6px;">
+          <button id="adminVerifyBtn" class="btn-primary" style="padding:8px 14px;font-size:12px;margin-left:6px;">Verificar</button>
+          <div id="adminErr" style="font-size:11px;color:var(--accent);margin-top:4px;display:none;">Correo no autorizado</div>
+        </div>
+        <button id="exportBtn" class="btn-secondary hidden" style="padding:8px 14px;font-size:12px;">Descargar CSV</button>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const DEADLINE = new Date('2026-10-31T23:59:59-05:00');
+  const MAX_ATTEMPTS = 2;
+  const EXAM_SECONDS = 45*60;
+  const PASS_SCORE = 60;
+  const LETTERS = 'ABCDEFGH';
+  const API_BASE = '/.netlify/functions';
+
+  // Países de América (Canadá y España excluidos) + Otro con campo libre
+  const COUNTRIES = [
+    'Argentina','Bahamas','Barbados','Belice','Bolivia','Brasil','Chile','Colombia','Costa Rica','Cuba',
+    'Dominica','Ecuador','El Salvador','Estados Unidos','Granada','Guatemala','Guyana','Haití','Honduras',
+    'Jamaica','México','Nicaragua','Panamá','Paraguay','Perú','República Dominicana','San Cristóbal y Nieves',
+    'Santa Lucía','San Vicente y las Granadinas','Surinam','Trinidad y Tobago','Uruguay','Venezuela','Otro'
+  ];
+
+  // Preguntas oficiales (Question_List_Sonda_2026.10.15)
+  // Puntaje: 5 única×5 + 5 múltiple×10 + 5 V/F×5 = 100 pts
+  // Claves ofuscadas (divididas en _k1 + _k2)
+  const Q = [
+    {type:'single',pts:5,text:'¿Cuál de las siguientes plataformas de gestión de video (VMS) de Dahua es la más recomendada para proyectos de Ciudad Segura de gran escala?',opts:['DSS Onebox','DSS7116D(R)','DSS Pro','DSS Ultimate'],_k1:'Wz',_k2:'Nd'},
+    {type:'single',pts:5,text:'¿Cuál de las siguientes funciones NO forma parte del módulo de Centro de Tráfico de DSS Ultimate?',opts:['Registro y consulta de infracciones de tráfico','Estadísticas de flujo vehicular','Despacho y asignación de incidentes','Registro y consulta de eventos viales'],_k1:'Wz',_k2:'Jd'},
+    {type:'single',pts:5,text:'¿Cuál es la principal ventaja de las cámaras ITS (Sistema de Tráfico Inteligente) con tecnología Glowlight para vigilancia y detección nocturna?',opts:['Graban exclusivamente en blanco y negro, reduciendo el consumo de almacenamiento','Emplean luz cálida como iluminación complementaria, generan imágenes a color en todo momento y presentan baja contaminación lumínica','Pueden utilizar iluminación infrarroja las 24 horas del día para obtener imágenes más nítidas','Diseño integrado que reduce de forma eficaz el cableado y el tiempo de instalación'],_k1:'Wz',_k2:'Fd'},
+    {type:'single',pts:5,text:'¿Qué funciones de seguridad activa soporta actualmente la solución vehicular de Dahua?',opts:['DSM (Monitoreo del estado del conductor)','ADAS (Sistema de asistencia avanzada a la conducción)','BSD (Detección de punto ciego)','Todas las anteriores'],_k1:'Wz',_k2:'Nd'},
+    {type:'single',pts:5,text:'¿Cuál de las siguientes es una función del sistema ADAS (Asistencia Avanzada al Conductor) de la solución vehicular de Dahua?',opts:['Advertencia de fatiga o somnolencia del conductor','Advertencia de salida de carril','Detección de uso de teléfono celular','Detección de que el conductor fuma'],_k1:'Wz',_k2:'Fd'},
+    {type:'multi',pts:10,text:'¿Cuáles de los siguientes elementos puede detectar de forma integrada una cámara ITS de Dahua? (Seleccione todas las que correspondan)',opts:['Reconocimiento de placas vehiculares (ANPR)','Identificación del tipo de vehículo','Determinación del color del vehículo','Detección automática de infracciones de tránsito'],_k1:'Wz',_k2:'AsMSwyLDNd'},
+    {type:'multi',pts:10,text:'¿Cuáles de las siguientes funcionalidades integra la plataforma DSS Ultimate? (Seleccione todas las que correspondan)',opts:['Gestión de casos de emergencia y administración de evidencias','Módulo de Centro de Tráfico','Monitoreo y gestión de vehículos','Centro de monitoreo, centro de eventos y búsqueda inteligente'],_k1:'Wz',_k2:'AsMSwyLDNd'},
+    {type:'multi',pts:10,text:'¿Cuáles de los siguientes comportamientos puede detectar el módulo DSM (Monitoreo del Estado del Conductor) de Dahua? (Seleccione todas las que correspondan)',opts:['Fatiga o somnolencia (bostezo, ojos cerrados)','Distracción del conductor (mirar hacia un lado)','Uso de teléfono celular o fumar al conducir','No uso del cinturón de seguridad'],_k1:'Wz',_k2:'AsMSwyLDNd'},
+    {type:'multi',pts:10,text:'¿Cuáles de las siguientes infracciones puede detectar automáticamente una cámara ITS de Dahua? (Seleccione todas las que correspondan)',opts:['Pasarse un semáforo en rojo','Conducción en sentido contrario','Exceso de velocidad','No uso del cinturón de seguridad'],_k1:'Wz',_k2:'AsMSwyLDNd'},
+    {type:'multi',pts:10,text:'¿Cuáles de los siguientes son beneficios para el cliente de aplicar el conteo de pasajeros en autobuses públicos? (Seleccione todas las que correspondan)',opts:['Obtener datos de ocupación por parada para optimizar rutas y horarios','Comparar el aforo con los ingresos por boleto para detectar diferencias y pérdidas','Servir como respaldo para la obtención de subsidios gubernamentales','Garantizar de forma automática que ningún estudiante quede olvidado dentro del vehículo'],_k1:'Wz',_k2:'AsMSwyXQ=='},
+    {type:'tf',pts:5,text:'DSS Ultimate es una plataforma adecuada para proyectos de Ciudad Segura, ya que permite gestionar incidentes, asignarlos para su atención y administrar de forma profesional las evidencias asociadas.',opts:['Verdadero','Falso'],_k1:'Wz',_k2:'Bd'},
+    {type:'tf',pts:5,text:'DSS Ultimate permite consultar registros de reconocimiento facial y de placas vehiculares, trazar trayectorias y configurar listas negras de rostros y vehículos, generando alarmas automáticas al detectar una coincidencia.',opts:['Verdadero','Falso'],_k1:'Wz',_k2:'Bd'},
+    {type:'tf',pts:5,text:'La dashcam Dahua DAE-CDR8214-GFWI no cuenta con GPS/GLONASS integrados; por tanto, si se necesita conocer la ubicación y trayectoria del vehículo, hay que adquirir una antena de GPS adicional.',opts:['Verdadero','Falso'],_k1:'Wz',_k2:'Fd'},
+    {type:'tf',pts:5,text:'DSS Ultimate permite la revisión de infracciones, pero no la emisión de multas para aplicar la sanción correspondiente.',opts:['Verdadero','Falso'],_k1:'Wz',_k2:'Fd'},
+    {type:'tf',pts:5,text:'El dispositivo ITS Spotter Ultra de Dahua soporta captura y detección simultánea de hasta 8 carriles.',opts:['Verdadero','Falso'],_k1:'Wz',_k2:'Bd'}
+  ];
+
+  function getKey(q){ try{ return JSON.parse(atob(q._k1+q._k2)); }catch(e){ return []; } }
+
+  const TYPE_LABEL = {single:'Única',multi:'Múltiple',tf:'V/F'};
+  let state = {user:null, answers:{}, current:0, timeLeft:EXAM_SECONDS, timer:null, result:null};
+  const app = document.getElementById('app');
+
+  function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function fmtTime(sec){const m=Math.floor(sec/60),s=sec%60;return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+  function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2600);}
+
+  // === Llamadas al servidor (registro centralizado, validación cruzada de dispositivos) ===
+  async function checkAttempts(name,email){
+    try{
+      const res=await fetch(`${API_BASE}/dhip-exam?action=check&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`);
+      return await res.json();
+    }catch(e){return{ok:false,attempts:0,error:'Error de conexión con el servidor. Intente nuevamente.'};}
+  }
+  async function submitRecord(data){
+    try{
+      const res=await fetch(`${API_BASE}/dhip-exam`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      return await res.json();
+    }catch(e){return{ok:false,error:'Error al guardar el registro. Intente nuevamente.'};}
+  }
+  async function exportAll(email){
+    try{
+      const res=await fetch(`${API_BASE}/dhip-exam?action=export&email=${encodeURIComponent(email)}`);
+      if(res.status===403)return{ok:false,error:'No autorizado'};
+      return await res.json();
+    }catch(e){return{ok:false,error:'Error de conexión'};}
+  }
+
+  // Validez del examen
+  function tickValidity(){
+    const el=document.getElementById('validity');if(!el)return;
+    const now=new Date(),diff=DEADLINE-now;
+    if(diff<=0){el.innerHTML='<span class="badge" style="background:#fee2e2;color:#991b1b;">Examen Cerrado</span>';return;}
+    const d=Math.floor(diff/86400000),h=Math.floor((diff%86400000)/3600000);
+    el.innerHTML='<span class="badge" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);">Válido hasta 31 Oct 2026</span><div style="margin-top:4px;">'+d+'d '+h+'h restantes</div>';
+  }
+  tickValidity();setInterval(tickValidity,60000);
+
+  // Seguridad durante el examen
+  document.addEventListener('contextmenu',e=>{if(state.timer)e.preventDefault();});
+  document.addEventListener('copy',e=>{if(state.timer)e.preventDefault();});
+  document.addEventListener('cut',e=>{if(state.timer)e.preventDefault();});
+  document.addEventListener('selectstart',e=>{if(state.timer)e.preventDefault();});
+  document.addEventListener('visibilitychange',()=>{if(state.timer && document.hidden)toast('Aviso: cambio de pestaña detectado.');});
+  window.addEventListener('beforeunload',e=>{if(state.timer){e.preventDefault();e.returnValue='';}});
+
+  // === Exportación solo para administrador ===
+  document.getElementById('exportLoginBtn').addEventListener('click',()=>{
+    document.getElementById('adminLoginForm').classList.toggle('hidden');
+  });
+  document.getElementById('adminVerifyBtn').addEventListener('click',async ()=>{
+    const email=document.getElementById('adminEmail').value.trim().toLowerCase();
+    const btn=document.getElementById('adminVerifyBtn');
+    btn.innerHTML='<span class="loading"></span> Verificando';
+    const r=await exportAll(email);
+    btn.innerHTML='Verificar';
+    if(r.ok){
+      document.getElementById('exportLoginBtn').classList.add('hidden');
+      document.getElementById('adminLoginForm').classList.add('hidden');
+      document.getElementById('exportBtn').classList.remove('hidden');
+      document.getElementById('adminErr').style.display='none';
+      document.getElementById('exportBtn').onclick=()=>{
+        const head='Nombre,Correo Corporativo,País,Intento,Puntaje,Estado,Entrega Automática,Fecha\n';
+        const body=r.records.map(x=>[x.nombre,x.email,x.pais,x.intento,x.puntaje,x.estado,x.auto?'Sí':'No',x.fecha]
+          .map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\n');
+        const blob=new Blob(['\ufeff'+head+body],{type:'text/csv;charset=utf-8;'});
+        const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dhip_certificacion_registros.csv';a.click();
+        toast('Exportados '+r.records.length+' registros');
+      };
+      toast('Acceso concedido');
+    }else{
+      document.getElementById('adminErr').style.display='block';
+    }
+  });
+
+  function renderClosed(){
+    app.innerHTML=`<div class="reveal" style="max-width:560px;margin:40px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:48px 32px;text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#fee2e2;color:#991b1b;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px;font-weight:800;">!</div>
+      <h2 style="font-size:22px;font-weight:800;margin:0 0 10px;">Periodo de Examen Finalizado</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6;margin:0;">El plazo venció el 31 de octubre de 2026. Contacte al administrador si considera que es un error.</p>
+    </div>`;
+  }
+
+  function renderRegister(){
+    const opts=COUNTRIES.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+    app.innerHTML=`<div class="reveal" style="max-width:640px;margin:0 auto;">
+      <div style="background:linear-gradient(135deg,#111827 0%,#1f2937 100%);border-radius:16px;padding:32px;color:#fff;margin-bottom:20px;position:relative;overflow:hidden;">
+        <div style="position:absolute;right:-30px;top:-30px;width:180px;height:180px;border-radius:50%;background:var(--accent);opacity:.18;"></div>
+        <div class="badge" style="background:rgba(230,0,18,.2);color:#ffb3b8;border:1px solid rgba(230,0,18,.5);margin-bottom:12px;">Certificación Oficial Dahua</div>
+        <h1 style="font-size:26px;font-weight:800;margin:0 0 12px;line-height:1.2;">Examen de Certificación DHIP</h1>
+        <ul style="margin:0;padding-left:18px;opacity:.9;line-height:1.8;font-size:14px;">
+          <li>Cada persona tiene <strong>2 intentos</strong></li>
+          <li>Fecha límite: <strong>31 de octubre de 2026</strong></li>
+        </ul>
+        <p style="margin-top:14px;margin-bottom:0;font-size:14px;opacity:.9;">Complete sus datos para iniciar; se utilizarán para la emisión de su certificación.</p>
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;">
+        <h2 style="font-size:17px;font-weight:700;margin:0 0 18px;">Datos del Participante</h2>
+        <div style="margin-bottom:14px;"><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Nombre completo <span style="color:var(--accent);">*</span></label>
+          <input id="f_name" class="field" type="text" placeholder="Ingrese su nombre completo" autocomplete="off"></div>
+        <div style="margin-bottom:14px;"><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Correo corporativo Sonda <span style="color:var(--accent);">*</span></label>
+          <input id="f_email" class="field" type="email" placeholder="nombre@sonda.com" autocomplete="off">
+          <div id="emailErr" style="font-size:12px;color:var(--accent);margin-top:5px;display:none;">Ingrese un correo corporativo Sonda válido.</div></div>
+        <div style="margin-bottom:8px;"><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">País <span style="color:var(--accent);">*</span></label>
+          <select id="f_country" class="field"><option value="">— Seleccione su país —</option>${opts}</select></div>
+        <div id="f_other_wrap" class="hidden" style="margin-bottom:14px;"><label style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;">Especifique país <span style="color:var(--accent);">*</span></label>
+          <input id="f_other" class="field" type="text" placeholder="Escriba su país" autocomplete="off"></div>
+        <div id="attemptsInfo" style="font-size:13px;margin-bottom:16px;min-height:18px;"></div>
+        <button id="startBtn" class="btn-primary" style="width:100%;">Iniciar Examen</button>
+      </div>
+    </div>`;
+
+    document.getElementById('f_country').addEventListener('change',e=>{
+      document.getElementById('f_other_wrap').classList.toggle('hidden',e.target.value!=='Otro');
+    });
+
+    document.getElementById('startBtn').addEventListener('click',async ()=>{
+      const name=document.getElementById('f_name').value.trim();
+      const email=document.getElementById('f_email').value.trim();
+      let country=document.getElementById('f_country').value;
+      const otherVal=document.getElementById('f_other').value.trim();
+      if(country==='Otro'){if(!otherVal){toast('Especifique su país.');return;}country=otherVal;}
+      const emailOk=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.toLowerCase())&&/sonda/.test(email.toLowerCase());
+      if(name.length<2){toast('Ingrese su nombre completo.');return;}
+      if(!emailOk){document.getElementById('emailErr').style.display='block';toast('Correo corporativo Sonda inválido.');return;}
+      if(!country){toast('Seleccione su país.');return;}
+
+      const btn=document.getElementById('startBtn');
+      btn.innerHTML='<span class="loading"></span> Verificando intentos...';
+      btn.disabled=true;
+      const chk=await checkAttempts(name,email);
+      btn.innerHTML='Iniciar Examen';
+      btn.disabled=false;
+
+      const info=document.getElementById('attemptsInfo');
+      if(!chk.ok){toast(chk.error);return;}
+      if(chk.exceeded){
+        info.innerHTML='<span style="color:var(--accent);font-weight:700;">Ha alcanzado el límite de 2 intentos. No puede iniciar un nuevo examen.</span>';
+        return;
+      }
+      info.innerHTML='Intentos disponibles: <strong style="color:var(--accent);">'+(MAX_ATTEMPTS-chk.attempts)+'</strong> de '+MAX_ATTEMPTS+(chk.attempts>0?' (ya realizó '+chk.attempts+' intento(s))':'');
+      state.user={name,email,country,attempts:chk.attempts};
+      state.answers={};state.current=0;state.timeLeft=EXAM_SECONDS;state.result=null;
+      renderExam();startTimer();
+    });
+  }
+
+  function startTimer(){stopTimer();state.timer=setInterval(()=>{
+    if(--state.timeLeft<=0){stopTimer();grade(true);return;}
+    const t=document.getElementById('timer');if(t)t.textContent=fmtTime(state.timeLeft);
+    if(state.timeLeft<=10&&t)t.style.color='var(--accent)';
+  },1000);}
+  function stopTimer(){if(state.timer){clearInterval(state.timer);state.timer=null;}}
+
+  function renderExam(){
+    const q=Q[state.current];
+    const answered=Object.values(state.answers).filter(a=>a&&a.length).length;
+    let nav='';for(let i=0;i<Q.length;i++){
+      nav+=`<button class="navbtn${state.answers[i]?.length?' answered':''}${i===state.current?' cur':''}" data-q="${i}">${i+1}</button>`;
+    }
+    let optsHtml='';const sel=state.answers[state.current]||[];
+    for(let j=0;j<q.opts.length;j++){
+      const isSel=sel.includes(j);
+      optsHtml+=`<button class="opt${q.type==='multi'?' multi':''}${isSel?' sel':''}" data-opt="${j}">
+        <span class="mark">${q.type==='tf'?(j?'F':'V'):LETTERS[j]}</span>
+        <span>${esc(q.opts[j])}</span></button>`;
+    }
+    const typeBadge=q.type==='multi'
+      ?`<span class="badge" style="background:#fef3c7;color:#92400e;">Múltiple · ${q.pts} pts · seleccione todas las correctas</span>`
+      :`<span class="badge" style="background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);">${TYPE_LABEL[q.type]} · ${q.pts} pts</span>`;
+    app.innerHTML=`<div class="reveal" style="max-width:820px;margin:0 auto;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
+        <div style="font-size:13px;color:var(--muted);font-weight:600;">${esc(state.user.name)} · ${esc(state.user.country)}</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <span class="badge" style="background:#111827;color:#fff;">Respondidas ${answered}/${Q.length}</span>
+          <span id="timer" class="badge" style="background:#111827;color:#fff;font-variant-numeric:tabular-nums;">${fmtTime(state.timeLeft)}</span>
+        </div>
+      </div>
+      <div style="height:6px;background:#e5e7eb;border-radius:99px;margin-bottom:20px;overflow:hidden;">
+        <div style="height:100%;width:${answered/Q.length*100}%;background:var(--accent);transition:width .3s;"></div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <span style="font-size:13px;font-weight:700;color:var(--muted);">Pregunta ${state.current+1} de ${Q.length}</span>${typeBadge}
+        </div>
+        <h2 style="font-size:18px;font-weight:700;line-height:1.5;margin:0 0 20px;">${esc(q.text)}</h2>
+        <div id="opts">${optsHtml}</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:20px;">
+        <button id="prevBtn" class="btn-secondary" ${state.current===0?'disabled style="opacity:.4;cursor:not-allowed;"':''}>← Anterior</button>
+        ${state.current<Q.length-1
+          ?'<button id="nextBtn" class="btn-primary">Siguiente →</button>'
+          :'<button id="submitBtn" class="btn-primary">Finalizar y Entregar</button>'}
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;">Navegación de preguntas</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;">${nav}</div>
+      </div>
+    </div>`;
+    bindExam();
+  }
+
+  function bindExam(){
+    const q=Q[state.current];
+    document.querySelectorAll('#opts .opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const idx=parseInt(btn.getAttribute('data-opt'),10);
+        let cur=(state.answers[state.current]||[]).slice();
+        if(q.type==='multi'){const p=cur.indexOf(idx);p>=0?cur.splice(p,1):cur.push(idx);cur.sort((a,b)=>a-b);}
+        else cur=[idx];
+        state.answers[state.current]=cur;
+        renderExam();
+      });
+    });
+    if(state.current>0)document.getElementById('prevBtn')?.addEventListener('click',()=>{state.current--;renderExam();});
+    document.getElementById('nextBtn')?.addEventListener('click',()=>{state.current++;renderExam();});
+    document.getElementById('submitBtn')?.addEventListener('click',confirmSubmit);
+    document.querySelectorAll('.navbtn').forEach(b=>b.addEventListener('click',()=>{state.current=parseInt(b.dataset.q,10);renderExam();}));
+  }
+
+  function confirmSubmit(){
+    const unanswered=Q.length-Object.values(state.answers).filter(a=>a&&a.length).length;
+    app.innerHTML=`<div class="reveal" style="max-width:520px;margin:40px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;">
+      <div style="width:52px;height:52px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;font-weight:800;">?</div>
+      <h2 style="font-size:20px;font-weight:800;margin:0 0 10px;">¿Entregar examen?</h2>
+      <p style="color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 8px;">${unanswered>0?`Tiene <strong style="color:var(--accent);">${unanswered} pregunta(s) sin responder</strong>. `:'Todas las preguntas han sido respondidas. '}Una vez entregado se consumirá un intento y no podrá modificar sus respuestas.</p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:22px;flex-wrap:wrap;">
+        <button id="cancelSub" class="btn-secondary">Volver al examen</button>
+        <button id="okSub" class="btn-primary">Sí, entregar</button>
+      </div>
+    </div>`;
+    document.getElementById('cancelSub').onclick=renderExam;
+    document.getElementById('okSub').onclick=()=>grade(false);
+  }
+
+  // === Calificación: única/V/F 5 pts; múltiple 10 pts, −5 por opción correcta omitida, 0 si hay error o sin responder ===
+  async function grade(autoSubmit){
+    stopTimer();
+    let total=0,detail=[];
+    for(let i=0;i<Q.length;i++){
+      const q=Q[i];
+      const correct=getKey(q);
+      const sel=state.answers[i]||[];
+      let got=0;
+      if(q.type==='multi'){
+        if(sel.length>0){
+          const hasWrong=sel.some(x=>!correct.includes(x));
+          if(!hasWrong){
+            const missed=correct.length-sel.length;
+            got=missed===0?q.pts:Math.max(0,q.pts-5*missed);
+          }
+        }
+      }else{
+        if(sel.length===1 && sel[0]===correct[0]) got=q.pts;
+      }
+      total+=got;
+      if(got<q.pts){
+        const yourAns=sel.length===0?'Sin respuesta':sel.map(x=>q.type==='tf'?(x?'Falso':'Verdadero'):LETTERS[x]).join(', ');
+        detail.push({n:i+1,type:TYPE_LABEL[q.type],max:q.pts,got,yours:yourAns,partial:got>0});
+      }
+    }
+    const pass=total>=PASS_SCORE;
+
+    app.innerHTML=`<div style="text-align:center;padding:40px;"><span class="loading" style="width:32px;height:32px;"></span><p style="margin-top:12px;color:var(--muted);">Guardando registro en el servidor...</p></div>`;
+
+    const res=await submitRecord({
+      nombre:state.user.name,email:state.user.email,pais:state.user.country,
+      puntaje:total,estado:pass?'APROBADO':'REPROBADO',auto:!!autoSubmit
+    });
+
+    if(!res.ok){
+      app.innerHTML=`<div class="reveal" style="max-width:520px;margin:40px auto;background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;">
+        <h3 style="color:var(--accent);margin:0 0 10px;">Error al guardar</h3>
+        <p style="color:var(--muted);margin:0 0 18px;">${res.error||'Intente nuevamente.'}</p>
+        <button onclick="location.reload()" class="btn-primary">Reintentar</button>
+      </div>`;
+      return;
+    }
+    state.result={total,pass,detail,usedAttempt:res.attempts,remaining:res.remaining,auto:autoSubmit};
+    renderResult();
+  }
+
+  function renderResult(){
+    const r=state.result;
+    const color=r.pass?'#047857':'#991b1b';
+    const bg=r.pass?'#d1fae5':'#fee2e2';
+    const rows=r.detail.length?r.detail.map(d=>`<tr style="border-bottom:1px solid var(--border);">
+      <td style="font-weight:700;padding:12px 8px;">Q${d.n}</td>
+      <td style="padding:12px 8px;"><span class="badge" style="background:var(--accent2-soft);color:var(--accent2);">${d.type}</span></td>
+      <td style="color:var(--muted);padding:12px 8px;">${esc(d.yours)}</td>
+      <td style="text-align:right;font-weight:700;color:${d.partial?'#b45309':color};padding:12px 8px;">${d.got} / ${d.max}${d.partial?' (parcial)':''}</td>
+    </tr>`).join(''):`<tr><td colspan="4" style="padding:20px;text-align:center;color:#047857;font-weight:700;">No hay preguntas por revisar — todo correcto.</td></tr>`;
+    app.innerHTML=`<div class="reveal" style="max-width:720px;margin:0 auto;">
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:36px;text-align:center;margin-bottom:20px;border-top:4px solid var(--accent);">
+        <div style="font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Resultado del examen</div>
+        <div style="font-size:64px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;">${r.total}<span style="font-size:24px;color:var(--muted);font-weight:600;"> / 100</span></div>
+        <div style="margin:16px 0;"><span class="badge" style="background:${bg};color:${color};font-size:14px;padding:6px 16px;">
+          ${r.pass?'¡APROBADO — Certificación pendiente de emisión':'REPROBADO — Mínimo 60 puntos'}
+        </span></div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">
+          ${esc(state.user.name)} · ${esc(state.user.country)}<br>
+          Intento ${r.usedAttempt} de ${MAX_ATTEMPTS} · Intentos restantes: <strong style="color:var(--accent);">${r.remaining}</strong>
+          ${r.auto?' · Entregado automáticamente por tiempo':''}
+        </div>
+        ${r.pass?'<div style="margin-top:16px;font-size:13px;background:#d1fae5;color:#065f46;padding:12px 16px;border-radius:10px;display:inline-block;">Sus datos han sido registrados. La certificación DHIP se emitirá y enviará a su correo corporativo.</div>':''}
+      </div>
+      <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:24px;">
+        <h3 style="font-size:16px;font-weight:700;margin:0 0 6px;">Preguntas a revisar</h3>
+        <p style="font-size:12.5px;color:var(--muted);margin:0 0 16px;">Por política de certificación no se revelan las respuestas correctas. Se muestran únicamente los ítems donde no obtuvo el puntaje completo y su respuesta.</p>
+        <table style="width:100%;font-size:13.5px;border-collapse:collapse;">
+          <thead><tr style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;border-bottom:1.5px solid var(--border);">
+            <th style="text-align:left;padding-bottom:8px;">Pregunta</th><th style="text-align:left;padding-bottom:8px;">Tipo</th><th style="text-align:left;padding-bottom:8px;">Su respuesta</th><th style="text-align:right;padding-bottom:8px;">Puntaje</th>
+          </tr></thead><tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;flex-wrap:wrap;">
+        ${r.remaining>0?'<button id="retryBtn" class="btn-primary">Usar siguiente intento ('+r.remaining+' restantes)</button>':'<button class="btn-secondary" disabled style="opacity:.5;cursor:not-allowed;">Sin intentos disponibles</button>'}
+        <button id="closeBtn" class="btn-secondary">Finalizar</button>
+      </div>
+    </div>`;
+    if(document.getElementById('retryBtn'))document.getElementById('retryBtn').onclick=()=>{
+      state.answers={};state.current=0;state.timeLeft=EXAM_SECONDS;state.result=null;
+      renderExam();startTimer();
+    };
+    document.getElementById('closeBtn').onclick=()=>{state.user=null;state.result=null;renderRegister();};
+  }
+
+  if(new Date()>DEADLINE)renderClosed();else renderRegister();
+})();
+</script>
+</body>
+</html>
