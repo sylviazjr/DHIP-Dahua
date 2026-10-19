@@ -31,7 +31,11 @@ function makeHash(r) {
 
 exports.handler = async (event) => {
   try {
-    const store = await getStore();
+   const store = getStore({
+  name: process.env.NETLIFY_BLOBS_STORE_NAME || 'dhip_exam_records',
+  siteID: process.env.NETLIFY_BLOBS_SITE_ID,
+  token: process.env.NETLIFY_BLOBS_TOKEN
+});
     const params = new URLSearchParams(event.rawQuery);
     const action = params.get('action');
 
